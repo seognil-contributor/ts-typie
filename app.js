@@ -19,7 +19,15 @@ const ora_1 = __importDefault(require("ora"));
     // * ---------------------------------------------------------------- util
     const b = (s) => chalk_1.default.bold(s);
     const isTyped = (dep) => /^@types\//.test(dep);
-    const joinDeps = (deps) => deps.map((dep) => `@types/${dep}`).join(' ');
+    const d2t = (dep) => `@types/${dep}`;
+    const joinDeps = (deps) => deps.map(d2t).join(' ');
+    const logSkip = (str) => {
+        // ? display or not, it's verbose
+        // console.log(chalk.yellow(figures.bullet, str));
+    };
+    const logUninstall = (str) => {
+        console.log(chalk_1.default.red(figures_1.default.arrowLeft, str));
+    };
     // * ---------------------------------------------------------------- env and checking
     // * ---------------- tools
     // * list of supported package manager tools
@@ -81,19 +89,12 @@ const ora_1 = __importDefault(require("ora"));
         .map((dep) => dep.replace(`@types/`, ''))
         .filter((intalled) => !allNormalDeps.find((dep) => dep === intalled));
     const shouldRemoveTypeDeps = [...new Set([...deprecated, ...unused])];
-    // * ---------------------------------------------------------------- display skipping
+    // * ---------------------------------------------------------------- display skipping installed
     alreadyTypedDeps.forEach((dep) => {
-        console.log(chalk_1.default.yellow(figures_1.default.play, `Types for ${b(dep)} already installed. Skipping...`));
+        logSkip(`${b(d2t(dep))} for ${dep} already installed. Skipping...`);
     });
     selfTypedDeps.forEach((dep) => {
-        console.log(chalk_1.default.yellow(figures_1.default.warning, `Module ${b(dep)} includes own types. Skipping...`));
-    });
-    // * ---------------------------------------------------------------- display uninstalling
-    deprecated.forEach((dep) => {
-        console.log(chalk_1.default.red(figures_1.default.cross, `@types/${b(dep)} is deprecated. Uninstalling...`));
-    });
-    unused.forEach((dep) => {
-        console.log(chalk_1.default.red(figures_1.default.cross, `@types/${b(dep)} is unused. Uninstalling...`));
+        logSkip(`${b(dep)} includes own types. Skipping...`);
     });
     // * ---------------------------------------------------------------- fetching
     // `https://www.npmjs.com/@types/${dep}`
@@ -109,40 +110,38 @@ const ora_1 = __importDefault(require("ora"));
             });
         });
     };
-    // * parallel
+    const spinner = ora_1.default('Fetching...').start();
+    // * parallel fetch
     const fetchAll = await Promise.all(shouldAddTypeDeps.map((dep) => fetchPkg(dep)));
+    spinner.stop();
     const founds = fetchAll.filter(([, found]) => found).map(([dep]) => dep);
     const notFounds = fetchAll.filter(([, found]) => !found).map(([dep]) => dep);
-    // * ---------------------------------------------------------------- display skipping, installing
+    // * ---------------------------------------------------------------- display skipping not found
     notFounds.forEach((dep) => {
-        console.log(chalk_1.default.red(figures_1.default.cross, `No types found for ${b(dep)} in registry. Skipping...`));
+        logSkip(`${b(d2t(dep))} not found in registry. Skipping...`);
     });
+    // * ---------------------------------------------------------------- display uninstalling list
+    deprecated.forEach((dep) => {
+        logUninstall(`${b(d2t(dep))} is deprecated. Uninstalling...`);
+    });
+    unused.forEach((dep) => {
+        logUninstall(`${b(d2t(dep))} is unused. Uninstalling...`);
+    });
+    // * ---------------------------------------------------------------- display installing list
     if (founds.length) {
         founds.forEach((dep) => {
-            console.log(chalk_1.default.green(figures_1.default.tick, `Installing @types/${b(dep)}`));
+            console.log(chalk_1.default.green(figures_1.default.arrowRight, `Installing ${b(d2t(dep))}`));
         });
     }
     else {
-        console.log(chalk_1.default.white(figures_1.default.circle, `Nothing needs to be install`));
-    }
-    // * ---------------------------------------------------------------- calculate commands
-    let commands = [];
-    if (shouldRemoveTypeDeps.length) {
-        commands.push(`${tool.uninstall} ${joinDeps(shouldRemoveTypeDeps)}`);
-    }
-    if (founds.length) {
-        commands.push(`${tool.uninstall} ${joinDeps(shouldRemoveTypeDeps)}`);
+        console.log(chalk_1.default.white(figures_1.default.squareSmallFilled, `Nothing needs to be install`));
     }
     // * ---------------------------------------------------------------- run commands or not
-    const spinner = ora_1.default('Processing...').start();
-    const complete = () => {
-        spinner.stop();
-        console.log(chalk_1.default.green(figures_1.default.tick, `Accomplished!`));
-    };
-    if (commands.length) {
-        child_process_1.exec(commands.join('; '), () => complete());
+    if (shouldRemoveTypeDeps.length) {
+        child_process_1.execSync(`${tool.uninstall} ${joinDeps(shouldRemoveTypeDeps)}`, { stdio: 'inherit' });
     }
-    else {
-        complete();
+    if (founds.length) {
+        child_process_1.execSync(`${tool.install} ${joinDeps(founds)}`, { stdio: 'inherit' });
     }
+    console.log(chalk_1.default.green(figures_1.default.tick, `Accomplished!`));
 })();
