@@ -13,22 +13,24 @@
     "type": "git",
     "url": "https://github.com/T-Specht/ts-typie.git"
   },
-  "dependencies": {
-    "args": "^5.0.0",
-    "chalk": "^2.0.1",
-    "command-exists": "^1.2.8",
-    "figures": "^2.0.0",
-    "request": "^2.81.0"
-  },
   "bin": {
     "ts-typie": "app.js"
   },
   "devDependencies": {
     "@types/args": "^3.0.0",
-    "@types/chalk": "^0.4.31",
     "@types/command-exists": "^1.2.0",
-    "@types/figures": "^2.0.0",
-    "@types/request": "^2.0.0",
-    "typescript": "^3.3.3"
+    "@types/node": "^13.11.1",
+    "@types/request": "^2.48.4",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "args": "^5.0.1",
+    "chalk": "^4.0.0",
+    "command-exists": "^1.2.8",
+    "figures": "^3.2.0",
+    "ora": "^4.0.3",
+    "pkg-dir": "^4.2.0",
+    "registry-url": "^5.1.0",
+    "request": "^2.88.2"
   }
 }

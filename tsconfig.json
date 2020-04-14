@@ -1,12 +1,9 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
-        "noImplicitAny": false,
+        "target": "ESNext",
+        "module": "CommonJS",
+        "strict": true,
+        "esModuleInterop": true,
         "sourceMap": false,
-        "lib": [
-            "es6",
-            "es7"
-        ]
     }
 }
