@@ -24,7 +24,7 @@ export const parsePkg = (rootDir: string) => {
 
   // * jest needs @types/jest somehow, don't know why yet
   // ! maybe better checking method
-  const selfIgnore = ['jest'];
+  const itsNotSelfed: string[] = ['jest'];
 
   const depsSelfTyped = depsAll
     .filter((dep) => {
@@ -41,7 +41,7 @@ export const parsePkg = (rootDir: string) => {
 
       return false;
     })
-    .filter((dep) => !selfIgnore.includes(dep));
+    .filter((dep) => !itsNotSelfed.includes(dep));
 
   // * ---------------- types result
 

@@ -54,7 +54,7 @@ const parsePkg = (rootDir) => {
     const depsAlreadyTyped = depsAll.filter((dep) => typesAll.includes(`@types/${dep}`));
     // * jest needs @types/jest somehow, don't know why yet
     // ! maybe better checking method
-    const selfIgnore = ['jest'];
+    const itsNotSelfed = ['jest'];
     const depsSelfTyped = depsAll
         .filter((dep) => {
         const pkgPath = path.join(rootDir, 'node_modules', dep, 'package.json');
@@ -66,7 +66,7 @@ const parsePkg = (rootDir) => {
         }
         return false;
     })
-        .filter((dep) => !selfIgnore.includes(dep));
+        .filter((dep) => !itsNotSelfed.includes(dep));
     // * ---------------- types result
     const d2t = (dep) => `@types/${dep}`;
     const sorter = (a, b) => (a < b ? -1 : 1);
@@ -100,11 +100,10 @@ const globalRegistry = registryUrl();
 // `https://registry.npm.taobao.org/@types/${dep}`
 // TODO mayby failure fallback ?
 const fetchSingle = (pkg) => {
-    const typesPkg = `@types/${pkg}`;
-    const url = `${globalRegistry}/${typesPkg}`.replace('//@types', '/@types');
+    const url = `${globalRegistry}/${pkg}`.replace('//@types', '/@types');
     return new Promise((resolve) => {
         request(url, (err, res, body) => {
-            resolve([typesPkg, res.statusCode === 200]);
+            resolve([pkg, res.statusCode === 200]);
         });
     });
 };

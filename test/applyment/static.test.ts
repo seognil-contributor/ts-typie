@@ -21,15 +21,14 @@ describe('run test', () => {
     const readPkg = (file: string) =>
       JSON.parse(fs.readFileSync(path.resolve(currentDir, file), 'utf8'));
 
-    const j1 = readPkg('./package.json');
-    const j2 = readPkg('./package.expect.json');
+    const jsonResult = readPkg('./package.json');
+    const jsonExp = readPkg('./package.expect.json');
 
-    const listDeps = (pkg: any, field: string) => {
+    const listDeps = (pkg: any, field: string) =>
       Object.keys(pkg[field]).sort((a, b) => (a < b ? -1 : 1));
-    };
 
-    expect(listDeps(j1, 'devDependencies')).toEqual(listDeps(j2, 'devDependencies'));
+    expect(listDeps(jsonResult, 'devDependencies')).toEqual(listDeps(jsonExp, 'devDependencies'));
 
-    expect(listDeps(j1, 'dependencies')).toEqual(listDeps(j2, 'dependencies'));
+    expect(listDeps(jsonResult, 'dependencies')).toEqual(listDeps(jsonExp, 'dependencies'));
   });
 });
