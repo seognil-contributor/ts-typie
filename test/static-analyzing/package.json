@@ -1,0 +1,24 @@
+{
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^4.1.1",
+    "@types/chalk": "^2.2.0",
+    "@types/ora": "^3.2.0",
+    "@types/terser-webpack-plugin": "^2.2.0",
+    "jest": "^25.3.0",
+    "rollup": "^2.6.1",
+    "rollup-plugin-hashbang": "^2.2.2",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "args": "^5.0.1",
+    "chalk": "^4.0.0",
+    "command-exists": "^1.2.8",
+    "figures": "^3.2.0",
+    "ora": "^4.0.3",
+    "pkg-dir": "^4.2.0",
+    "pretty-ms": "^6.0.1",
+    "registry-url": "^5.1.0",
+    "request": "^2.88.2",
+    "tslib": "^1.11.1"
+  }
+}
