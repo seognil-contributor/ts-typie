@@ -9,20 +9,20 @@ export const logLists: Logger = ({ deprecated, unused, founds }) => {
   // * ---------------- log uninstall list
 
   deprecated.forEach((dep) => {
-    console.log(chalk.red(figures.arrowLeft, `${b(dep)} is deprecated. Need to uninstall`));
+    console.log(chalk.red(figures.arrowLeft, `${b(dep)} is deprecated. Needs to uninstall`));
   });
 
   unused.forEach((dep) => {
-    console.log(chalk.red(figures.arrowLeft, `${b(dep)} is unused. Need to uninstall`));
+    console.log(chalk.red(figures.arrowLeft, `${b(dep)} is unused. Needs to uninstall`));
   });
 
   // * ---------------- log install list
 
   if (founds.length) {
     founds.forEach((dep) => {
-      console.log(chalk.green(figures.arrowRight, `${b(dep)} is not installed. Waiting to install`));
+      console.log(chalk.green(figures.arrowRight, `${b(dep)} is missing. Waiting for install`));
     });
   } else {
-    console.log(chalk.white(figures.squareSmallFilled, `Nothing needs to be install`));
+    console.log(chalk.white(figures.squareSmallFilled, `Nothing new`));
   }
 };

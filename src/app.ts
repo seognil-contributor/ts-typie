@@ -55,5 +55,5 @@ import { logLists } from './log-information';
   // * ---------------- completing
 
   const deltaTime = prettyMs(Date.now() - startTime, { secondsDecimalDigits: 2 });
-  console.log(chalk.green(figures.tick, `All types are Ok, done in ${deltaTime}`));
+  console.log(chalk.green(figures.tick, `All types are OK. Done in ${deltaTime}`));
 })();

@@ -118,19 +118,19 @@ const logLists = ({ deprecated, unused, founds }) => {
     const b = (dep) => chalk.bold(dep);
     // * ---------------- log uninstall list
     deprecated.forEach((dep) => {
-        console.log(chalk.red(figures.arrowLeft, `${b(dep)} is deprecated. Uninstalling...`));
+        console.log(chalk.red(figures.arrowLeft, `${b(dep)} is deprecated. Needs to uninstall`));
     });
     unused.forEach((dep) => {
-        console.log(chalk.red(figures.arrowLeft, `${b(dep)} is unused. Uninstalling...`));
+        console.log(chalk.red(figures.arrowLeft, `${b(dep)} is unused. Needs to uninstall`));
     });
     // * ---------------- log install list
     if (founds.length) {
         founds.forEach((dep) => {
-            console.log(chalk.green(figures.arrowRight, `Installing ${b(dep)}`));
+            console.log(chalk.green(figures.arrowRight, `${b(dep)} is missing. Waiting for install`));
         });
     }
     else {
-        console.log(chalk.white(figures.squareSmallFilled, `Nothing needs to be install`));
+        console.log(chalk.white(figures.squareSmallFilled, `Nothing new`));
     }
 };
 
@@ -161,5 +161,5 @@ const logLists = ({ deprecated, unused, founds }) => {
     }
     // * ---------------- completing
     const deltaTime = prettyMs(Date.now() - startTime, { secondsDecimalDigits: 2 });
-    console.log(chalk.green(figures.tick, `All types are Ok, done in ${deltaTime}`));
+    console.log(chalk.green(figures.tick, `All types are OK. Done in ${deltaTime}`));
 })();
